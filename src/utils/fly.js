@@ -1,9 +1,16 @@
 import Fly from 'flyio/dist/npm/wx';
 let fly = new Fly(); // 创建fly实例
 
+const APP_KEY = 'HE1902220035231573';
+
+// 基础配置
+fly.config.timeout = 10000;
+fly.config.baseURL = 'https://free-api.heweather.net/s6';
+
 // 添加请求拦截器
 fly.interceptors.request.use((request) => {
     wx.showLoading({title: '拼命加载中...'});
+    request.body['key'] = APP_KEY;
     return request;
 });
 
@@ -20,4 +27,4 @@ fly.interceptors.response.use((response, promise) => {
     return promise.resolve();
 });
 
-return fly;
+export default fly;
