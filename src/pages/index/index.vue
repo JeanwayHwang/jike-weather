@@ -1,7 +1,7 @@
 <template>
     <div class="jike-index">
         <!--当前天气板块-->
-        <div class="current-cond">
+        <div class="current-cond-wrap">
             <img src="../../../static/images/totem/sunny.jpg" alt="气象图腾" class="cond-totem">
             <div class="cond-wrap">
                 <div class="cond-block now-cond-wrap">
@@ -10,15 +10,25 @@
                 </div>
                 <div class="cond-block today-cond-wrap">
                     <h2>今日.{{weekDate}}</h2>
-                    <h3>{{todayMinTmp}} - {{todayMaxTmp}}°C</h3>
+                    <h3>{{todayMinTmp}}~{{todayMaxTmp}}°C</h3>
                 </div>
             </div>
             <h2 class="cond-text">{{currentCond.cond_txt}}</h2>
-            <h2 class="cond-quality"><span class="qa-great">73 空气质量良好</span></h2>
+            <h2 class="cond-quality"><span class="qa-great">{{airQuality.score}} 空气质量{{airQuality.grade}}</span></h2>
         </div>
         <!--逐时预报板块-->
         <!--多日预报板块-->
         <!--生活指数板块-->
+        <div class="lifestyle-wrap">
+            <ul>
+                <li v-for="item in lifeStyle" :key="item">
+                    <h1 class="iconfont lifestyle-icon" :class="item.iconClass"></h1>
+                    <h2>{{item.type}}</h2>
+                    <h3>{{item.brf}}</h3>
+                </li>
+            </ul>
+        </div>
+        <!--贴底导航-->
         <div class="footer-tab">
             <ul class="footer-tab-list">
                 <li @click="switchTab('collection')"><span class="iconfont icon-book-open-outline"></span></li>
@@ -35,8 +45,8 @@
 </template>
 
 <script>
-import {getWeather} from '@/utils/api';
-import {goToPage, getConditionIcon, getWeekDate, getFormatTime} from '@/utils/common';
+import {getWeather, getNowAir} from '@/utils/api';
+import {goToPage, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime} from '@/utils/common';
 
 export default {
     data() {
@@ -51,7 +61,8 @@ export default {
             },
             hourlyForcast: [], // 逐3小时预报
             dailyForecast: [], // 7天预报
-            lifestyle: {} // 生活指数
+            lifestyle: [], // 生活指数
+            airQuality: {} // 空气质量
         };
     },
     components: {},
@@ -65,6 +76,17 @@ export default {
         },
         todayMaxTmp() {
             return this.dailyForecast[0] && this.dailyForecast[0].tmp_max;
+        },
+        lifeStyle() {
+            let newLifestyle = [];
+            for (var i = 0; i < this.lifestyle.length; i++) {
+                let item = this.lifestyle[i];
+                const originType = item.type || '';
+                item.type = getLifestyleName(originType);
+                item.iconClass = getLifestyleIcon(originType);
+                newLifestyle.push(item);
+            }
+            return newLifestyle;
         }
     },
     methods: {
@@ -79,7 +101,8 @@ export default {
     mounted() {
         this.nowTime = getFormatTime();
         this.weekDate = getWeekDate();
-        getWeather().then(res => {
+        // 获取天气状况合集
+        getWeather('上海').then(res => {
             const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
             this.currentCond = data.now;
             this.hourlyForcast = data.hourly;
@@ -88,12 +111,22 @@ export default {
         }).catch(err => {
             console.log(err);
         });
+        // 获取当前空气质量数据
+        getNowAir('上海').then(res => {
+            const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
+            this.airQuality = {
+                score: data.air_now_city && data.air_now_city.aqi || 0,
+                grade: data.air_now_city && data.air_now_city.qlty || '不明'
+            };
+        }).catch(err => {
+            console.log(err);
+        });
     }
 };
 </script>
 
 <style lang="scss" scoped>
-    .current-cond {
+    .current-cond-wrap {
         .cond-totem {
             display: block;
             width: 300px;
@@ -133,11 +166,11 @@ export default {
         }
         .now-cond-wrap {
             opacity: 1;
-            animation: showHideLoop 4s linear infinite alternate;
+            animation: showHideLoop 5s linear infinite alternate;
         }
         .today-cond-wrap {
             opacity: 0;
-            animation: hideShowLoop 4s linear infinite alternate;
+            animation: hideShowLoop 5s linear infinite alternate;
         }
         .cond-text {
             text-align: center;
@@ -171,6 +204,56 @@ export default {
             }
         }
         
+    }
+    .lifestyle-wrap {
+        margin-top: 30px;
+        ul {
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 2px 2px 3px #ccc;
+            li {
+                width: 24.5%;
+                float: left;
+                margin-bottom: 15px;
+                position: relative;
+                &::after {
+                    position: absolute;
+                    right: -1px;
+                    top: 0;
+                    height: 100%;
+                    content: '';
+                    display: block;
+                    border-right: solid 1px #eee;
+                }
+                .lifestyle-icon {
+                    text-align: center;
+                    color: #666;
+                    font-size: 14px;
+                    line-height: 18px;
+                }
+                h2 {
+                    text-align: center;
+                    font-family: 'Microsoft Yahei';
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: $textGrey;
+                }
+                h3 {
+                    text-align: center;
+                    font-family: 'Microsoft Yahei';
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: $textGrey;
+                }
+            }
+            li:nth-of-type(4n) {
+                &::after {
+                    display: none;
+                }
+            }
+        }
     }
     .footer-tab {
         width: 100%;
@@ -226,7 +309,6 @@ export default {
             opacity: 1;
         }
     }
-
     @keyframes showHideLoop {
         0% {
             opacity: 1;

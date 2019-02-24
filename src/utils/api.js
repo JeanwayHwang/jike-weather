@@ -13,6 +13,18 @@ export function getWeather(location = '北京市') {
 }
 
 /**
+ * 获取当前空气质量
+ *
+ * @param {string} 当前地区名称
+ * @return {Promise} Promise 响应结果
+ */
+export function getNowAir(location = '北京市') {
+    return fly.get('/air/now', {
+        location
+    });
+}
+
+/**
  * 获取实时天气
  *
  * @param {string} 当前地区名称

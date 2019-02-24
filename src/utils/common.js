@@ -41,6 +41,52 @@ export function getConditionIcon(condCode) {
 }
 
 /**
+ * 根据Type类型获取对应生活指数的指标名称
+ *
+ * @param {string} Type类型
+ * @return {string} 对应生活指数指标
+ */
+export function getLifestyleName(typeName) {
+    if (!typeName) {
+        return '';
+    }
+    const lifestyleTypeMap = {
+        'comf': '体感',
+        'drsg': '穿衣',
+        'flu': '感冒',
+        'sport': '运动',
+        'trav': '旅行',
+        'uv': '紫外线',
+        'cw': '洗车',
+        'air': '空气污染'
+    };
+    return lifestyleTypeMap[typeName] || '';
+}
+
+/**
+ * 根据Type类型获取对应生活指数的指标图标
+ *
+ * @param {string} Type类型
+ * @return {string} 对应生活指数图标
+ */
+export function getLifestyleIcon(typeName) {
+    if (!typeName) {
+        return '';
+    }
+    const lifestyleIconMap = {
+        'comf': 'icon-chongwu',
+        'drsg': 'icon-zhuti',
+        'flu': 'icon-yiliao',
+        'sport': 'icon-huodong',
+        'trav': 'icon-jipiao',
+        'uv': 'icon-qing1',
+        'cw': 'icon-cheliang',
+        'air': 'icon-wumai'
+    };
+    return lifestyleIconMap[typeName] || '';
+}
+
+/**
  * 获取今天是星期几
  *
  * @return {string} 星期字符串
