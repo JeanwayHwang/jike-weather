@@ -10,5 +10,8 @@ export default {
 </script>
 
 <style>
-
+    @import './common/css/iconfont.css';
+    html, body {
+        background-color: #f7f5f4;
+    }
 </style>

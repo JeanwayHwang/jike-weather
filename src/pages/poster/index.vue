@@ -1,5 +1,5 @@
 <template>
-    <div>Search</div>
+    <div>Poster</div>
 </template>
 
 <script>

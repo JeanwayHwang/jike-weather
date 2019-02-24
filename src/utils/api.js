@@ -6,7 +6,7 @@ import fly from './fly';
  * @param {string} 当前地区名称
  * @return {Promise} Promise 响应结果
  */
-export function getCurrentWeather (location = '北京市') {
+export function getCurrentWeather(location = '北京市') {
     return fly.get('/weather/now', {
         location
     });

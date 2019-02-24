@@ -33,7 +33,8 @@ module.exports = {
     'no-empty': ['off'],
     "operator-linebreak": ["error", "before"],
     "camelcase": ["warn", {properties: "never"}],
-    'space-before-function-paren': ['off']
+    'space-before-function-paren': ['off'],
+    'no-mixed-operators': [0]
   },
   globals: {
     App: true,
