@@ -39,3 +39,26 @@ export function getConditionTotem(condCode) {
 export function getConditionIcon(condCode) {
     return condCodeMap[condCode];
 }
+
+/**
+ * 获取今天是星期几
+ *
+ * @return {string} 星期字符串
+ */
+export function getWeekDate() {
+    let day = new Date().getDay();
+    let weeks = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    return weeks[day];
+}
+
+/**
+ * 格式化当前时间
+ *
+ * @return {string} hh:mm格式的时间字符串
+ */
+export function getFormatTime() {
+    let date = new Date();
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    return hour + ':' + min;
+}

@@ -19,12 +19,13 @@ fly.interceptors.response.use((response, promise) => {
     wx.hideLoading();
     return Promise.resolve(response.data);
 }, (err, promise) => {
+    const errMsg = '请求数据异常：' + err.status;
     wx.hideLoading();
     wx.showToast({
-        title: err.message,
+        title: errMsg,
         icon: 'none'
     });
-    return promise.resolve();
+    return promise.reject(errMsg);
 });
 
 export default fly;
