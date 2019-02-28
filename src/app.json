@@ -6,6 +6,11 @@
         "pages/poster/main",
         "pages/setting/main"
     ],
+    "permission": {
+        "scope.userLocation": {
+          "desc": "你的位置信息将用于小程序获取天气信息"
+        }
+    },
     "window": {
         "navigationBarBackgroundColor": "#fff",
         "navigationBarTextStyle": "black",

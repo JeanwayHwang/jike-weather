@@ -91,8 +91,8 @@ export function getLifestyleIcon(typeName) {
  *
  * @return {string} 星期字符串
  */
-export function getWeekDate() {
-    let day = new Date().getDay();
+export function getWeekDate(date) {
+    let day = date ? new Date(date).getDay() : new Date().getDay();
     let weeks = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     return weeks[day];
 }
