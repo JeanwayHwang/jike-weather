@@ -80,9 +80,10 @@
     top: 0;
     right: 0;
     height: 1px;
-    border-top: 1rpx solid #d9d9d9;
+    border-top: 1rpx solid #f0f0f0;
     color: #d9d9d9;
     left: 15px;
+    right: 15px;
   }
   
   .weui-cell:first-child:before {

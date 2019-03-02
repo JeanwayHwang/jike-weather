@@ -737,4 +737,4 @@ class QQMapWX {
     }
 };
 
-export default QQMapWX;
+module.exports = QQMapWX;

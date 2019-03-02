@@ -5,19 +5,26 @@ $textBrown: #57493f;
 $green: #97c741;
 $yellow: #f0c745;
 $orange: #db8933;
-
 $titleGrey: #838383;
 $secondTitleGrey: #999;
 $thirdTitleGrey: #b8b7b8;
 $bgWhite: #fcfcfc;
 
-@font-face {
-    font-family: "xiaoli";
-    src: url("../../common/css/font/xiaoli.eot"); /* IE9 */
-    src: url("../../common/css/font/xiaoli.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-    url("../../common/css/font/xiaoli.woff") format("woff"), /* chrome、firefox */
-    url("../../common/css/font/xiaoli.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
-    url("../../common/css/font/xiaoli.svg#xiaoli") format("svg"); /* iOS 4.1- */
-    font-style: normal;
-    font-weight: normal;
+.text-box {
+    margin: 15px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-sizing: border-box;
+    h1 {
+        font-size: 14px;
+        line-height: 20px;
+        color: $iconBrown;
+    }
+    p {
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 20px;
+        color: $titleGrey;
+    }
 }

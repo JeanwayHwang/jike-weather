@@ -63,7 +63,7 @@
                 <li @click="switchTab('search')"><span class="iconfont icon-search-outline"></span></li>
                 <li>
                     <span class="iconfont icon-external-link-outlin"></span>
-                    <button class="btnShare" open-type="share"></button>
+                    <button class="btn-share" open-type="share"></button>
                 </li>
                 <li @click="switchTab('poster')"><span class="iconfont icon-image-outline"></span></li>
                 <li @click="switchTab('setting')"><span class="iconfont icon-settings-outline"></span></li>
@@ -97,7 +97,7 @@ export default {
     computed: {
         condTotem() {
             let totemName = getConditionTotem(this.currentCond['cond_code']);
-            return require(`../../../static/images/totem/${totemName}.jpg`);
+            return `http://pnqvs14u3.bkt.clouddn.com/${totemName}.jpg`;
         },
         todayMinTmp() {
             return this.dailyForecast[0] && this.dailyForecast[0].tmp_min;
@@ -129,7 +129,7 @@ export default {
                 });
                 if (/0[0-2]:00/.test(item.time) && index !== 0) {
                     dividedOrder = index;
-                    anotherDate = /-\d{2} /.exec(item.time)[0] || '' + '日';
+                    anotherDate = (/\d{2} /.exec(item.time)[0] || '') + '日';
                 }
             });
             dividedOrder && newHourlyForecast.splice(dividedOrder, 0, {anotherDate});
@@ -189,11 +189,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .jike-index {
-        width: 100%;
-        box-sizing: border-box;
-        padding-bottom: 70px;
-    }
     .current-cond-wrap {
         .cond-totem {
             display: block;
@@ -214,7 +209,6 @@ export default {
                 top: 0;
                 h2 {
                     text-align: center;
-                    font-family: 'Microsoft Yahei';
                     font-weight: 400;
                     font-size: 14px;
                     line-height: 20px;
@@ -223,7 +217,6 @@ export default {
                 }
                 h3 {
                     text-align: center;
-                    font-family: 'Microsoft Yahei';
                     font-weight: 300;
                     font-size: 30px;
                     line-height: 40px;
@@ -412,7 +405,7 @@ export default {
                     line-height: 50px;
                     color: $iconGrey;
                 }
-                .btnShare {
+                .btn-share {
                     width: 30px;
                     height: 24px;
                     display: inline-block;
