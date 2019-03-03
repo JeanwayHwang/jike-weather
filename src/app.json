@@ -1,11 +1,12 @@
 {
     "pages": [
+        "pages/follow/main",
         "pages/index/main",
-        "pages/collection/main",
         "pages/search/main",
         "pages/poster/main",
         "pages/setting/main",
-        "pages/info/main"
+        "pages/info/main",
+        "pages/editFollowList/main"
     ],
     "permission": {
         "scope.userLocation": {

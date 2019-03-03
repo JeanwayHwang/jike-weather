@@ -108,3 +108,15 @@ export function getFormatTime() {
     let min = date.getMinutes();
     return hour + ':' + min;
 }
+
+/**
+ * @desc 计算两个时间点的间隔
+ * @param {Number} 目标时间点的时间戳
+ * @param {Number} 源时间点的时间戳（可选，若无该参数则源时间点为当前时间）
+ * @return {Number} 时间间隔（秒）
+ */
+
+export const compareWithMoment = (targetTime, originTime) => {
+    const gap = (originTime || new Date().getTime()) - targetTime;
+    return gap;
+};

@@ -1,8 +1,9 @@
 <template>
-    <div>Collection</div>
+    <div>编辑FollowList</div>
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 
 export default {
     data() {
@@ -10,12 +11,11 @@ export default {
 
         };
     },
-
-    components: {},
-
+    components: {
+        draggable
+    },
     methods: {
     },
-
     mounted() {
     }
 };

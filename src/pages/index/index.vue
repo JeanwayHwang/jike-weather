@@ -5,7 +5,7 @@
             <img :src="condTotem" alt="气象图腾" class="cond-totem">
             <div class="cond-wrap">
                 <div class="cond-block now-cond-wrap">
-                    <h2>当前.{{nowTime}}</h2>
+                    <h2>当前·{{nowTime}}</h2>
                     <h3>{{currentCond.tmp}}°C</h3>
                 </div>
                 <div class="cond-block today-cond-wrap">
@@ -14,7 +14,7 @@
                 </div>
             </div>
             <h2 class="cond-text">{{currentCond.cond_txt}}</h2>
-            <h2 class="cond-quality"><span class="qa-great">{{airQuality.score}} 空气质量{{airQuality.grade}}</span></h2>
+            <h2 class="air-quality"><span class="qa-great">{{airQuality.score}} 空气质量{{airQuality.grade}}</span></h2>
         </div>
         <!--逐时预报板块-->
         <div class="forecast-wrap">
@@ -59,7 +59,7 @@
         <!--贴底导航-->
         <div class="footer-tab">
             <ul class="footer-tab-list">
-                <li @click="switchTab('collection')"><span class="iconfont icon-book-open-outline"></span></li>
+                <li @click="switchTab('follow')"><span class="iconfont icon-book-open-outline"></span></li>
                 <li @click="switchTab('search')"><span class="iconfont icon-search-outline"></span></li>
                 <li>
                     <span class="iconfont icon-external-link-outlin"></span>
@@ -75,6 +75,7 @@
 <script>
 import {getWeather, getNowAir} from '@/utils/api';
 import {goToPage, getConditionTotem, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime} from '@/utils/common';
+
 export default {
     data() {
         return {
@@ -100,10 +101,10 @@ export default {
             return `http://pnqvs14u3.bkt.clouddn.com/${totemName}.jpg`;
         },
         todayMinTmp() {
-            return this.dailyForecast[0] && this.dailyForecast[0].tmp_min;
+            return this.dailyForecast[0] && this.dailyForecast[0].tmp_min || 0;
         },
         todayMaxTmp() {
-            return this.dailyForecast[0] && this.dailyForecast[0].tmp_max;
+            return this.dailyForecast[0] && this.dailyForecast[0].tmp_max || 0;
         },
         lifeStyle() {
             let newLifestyle = [];
@@ -241,30 +242,6 @@ export default {
             line-height: 58px;
             color: $textBrown;
         }
-        .cond-quality {
-            margin-top: 2px;
-            width: 100%;
-            text-align: center;
-            width: auto;
-            font-size: 12px;
-            line-height: 14px;
-            color: #fff;
-            span {
-                padding: 2px 6px;
-                display: inline-block;
-                border-radius: 5px;
-            }
-            .qa-great {
-                background-color: $green;
-            }
-            .qa-good {
-                background-color: $yellow;
-            }
-            .qa-bad {
-                background-color: $orange;
-            }
-        }
-        
     }
     .forecast-wrap {
         width: 100%;

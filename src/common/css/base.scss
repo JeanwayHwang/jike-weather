@@ -10,6 +10,29 @@ $secondTitleGrey: #999;
 $thirdTitleGrey: #b8b7b8;
 $bgWhite: #fcfcfc;
 
+.air-quality {
+    width: 100%;
+    text-align: center;
+    width: auto;
+    font-size: 12px;
+    line-height: 14px;
+    color: #fff;
+    span {
+        padding: 2px 6px;
+        display: inline-block;
+        border-radius: 5px;
+    }
+    .qa-great {
+        background-color: $green;
+    }
+    .qa-good {
+        background-color: $yellow;
+    }
+    .qa-bad {
+        background-color: $orange;
+    }
+}
+
 .text-box {
     margin: 15px;
     padding: 10px 15px;
