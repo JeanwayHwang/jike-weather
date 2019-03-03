@@ -100,8 +100,10 @@ export default {
                     nowCond.windGrade = weather.wind_sc;
                     nowCond.airScore = air.aqi || 0;
                     nowCond.airGrade = air.qlty || '不明';
+                    nowCond.updateTime = new Date().getTime();
                     followCondListCache[locationName] = nowCond;
                     this.followCondList = followCondListCache;
+                    wx.setStorageSync('followCondList', followCondListCache);
                 });
             }).catch(err => {
                 console.log(err);
