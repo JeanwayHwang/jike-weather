@@ -69,7 +69,6 @@ export default {
                 content: '确定要把' + item + '从收藏夹移除吗？',
                 success(res) {
                     if (res.confirm) {
-                        console.log('用户点击确定');
                         that.followList.splice(index, 1);
                     }
                 }
@@ -77,15 +76,7 @@ export default {
         }
     },
     mounted() {
-        wx.setStorageSync('followList', ['上海', '昆山']);
-
-        // const query = wx.createSelectorQuery();
-        // query.select('#item').boundingClientRect();
-        // query.selectViewport().scrollOffset();
-        // query.exec(function (res) {
-        //     console.log(res[0].top); // #the-id节点的上边界坐标
-        //     console.log(res[1].scrollTop); // 显示区域的竖直滚动位置
-        // });
+        console.log(this.followList);
     }
 };
 </script>

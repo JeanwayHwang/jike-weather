@@ -1,12 +1,38 @@
 import {condCodeMap} from './condCodeMap';
+
 /**
  * 页面跳转
  *
  * @param {string} 目标页面标识
  */
-export function goToPage(targetPage) {
+export function goToPage(targetPage, query) {
+    let queryStr = '';
+    if (query) {
+        queryStr = '?';
+    }
+    for (let key in query) {
+        queryStr += `${key}=${query[key]}`;
+    }
     wx.navigateTo({
-        url: `/pages/${targetPage}/main`
+        url: `/pages/${targetPage}/main${queryStr}`
+    });
+}
+
+/**
+ * 页面跳转（关闭当前页面，跳转到应用内某个页面）
+ *
+ * @param {string} 目标页面标识
+ */
+export function redirectToPage(targetPage, query) {
+    let queryStr = '';
+    if (query) {
+        queryStr = '?';
+    }
+    for (let key in query) {
+        queryStr += `${key}=${query[key]}`;
+    }
+    wx.redirectTo({
+        url: `/pages/${targetPage}/main${queryStr}`
     });
 }
 
@@ -106,7 +132,7 @@ export function getFormatTime() {
     let date = new Date();
     let hour = date.getHours();
     let min = date.getMinutes();
-    return hour + ':' + min;
+    return (hour >= 10 ? hour : '0' + hour) + ':' + min;
 }
 
 /**

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {getCurrentWeather, getNowAir} from '@/utils/api';
+import {getNowWeather, getNowAir} from '@/utils/api';
 import {goToPage, compareWithMoment} from '@/utils/common';
 const FOLLOW_LIMIT = 10;
 export default {
@@ -38,6 +38,7 @@ export default {
     },
     watch: {
         followList() {
+            console.log('followList changed');
             this.handleFollowCondList();
         }
     },
@@ -50,14 +51,16 @@ export default {
                 });
                 return;
             }
-            goToPage('search');
+            goToPage('search', {
+                followFlag: true
+            });
         },
         editFollowList() {
             goToPage('editFollowList');
         },
         getWeatherPromise(locationName) {
             return new Promise((resolve, reject) => {
-                getCurrentWeather(locationName).then(res => {
+                getNowWeather(locationName).then(res => {
                     const data = res && res.HeWeather6 && res.HeWeather6[0] && res.HeWeather6[0].now || {};
                     resolve(data);
                 }).catch(err => {
@@ -80,6 +83,16 @@ export default {
             // 多城市请求集合
             let fetchLocationList = [];
             let fetchPromiseList = [];
+            // 关注列表的增减，意味着followCondList也需要同步增减
+            for (let location in followCondListCache) {
+                let alreadyExist = this.followList.some((item) => {
+                    return item === location;
+                });
+                if (!alreadyExist) {
+                    // followCondList存在当前关注列表之外的城市，则移除掉
+                    delete followCondListCache[location];
+                }
+            }
             this.followList.forEach(itemLocation => {
                 let locationCond = followCondListCache[itemLocation];
                 if (!locationCond || compareWithMoment(locationCond.updateTime) > 60 * 60 * 1000) {
@@ -112,6 +125,9 @@ export default {
     },
     mounted() {
         this.handleFollowCondList();
+    },
+    onShow() {
+        this.followList = wx.getStorageSync('followList') || [];
     }
 };
 </script>

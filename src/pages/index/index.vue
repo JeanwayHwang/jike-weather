@@ -5,11 +5,11 @@
             <img :src="condTotem" alt="气象图腾" class="cond-totem">
             <div class="cond-wrap">
                 <div class="cond-block now-cond-wrap">
-                    <h2>当前·{{nowTime}}</h2>
+                    <h2>{{location}} {{nowTime}}</h2>
                     <h3>{{currentCond.tmp}}°C</h3>
                 </div>
                 <div class="cond-block today-cond-wrap">
-                    <h2>今日.{{weekDate}}</h2>
+                    <h2>{{location}} {{weekDate}}</h2>
                     <h3>{{todayMinTmp}}~{{todayMaxTmp}}°C</h3>
                 </div>
             </div>
@@ -73,12 +73,13 @@
 </template>
 
 <script>
-import {getWeather, getNowAir} from '@/utils/api';
+import {getWeather, getNowAir, getMyLocation} from '@/utils/api';
 import {goToPage, getConditionTotem, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime} from '@/utils/common';
 
 export default {
     data() {
         return {
+            location: null,
             nowTime: '00:00',
             weekDate: '',
             currentCond: {
@@ -94,11 +95,14 @@ export default {
     },
     components: {},
     watch: {
+        location() {
+            this.refreshInfo();
+        }
     },
     computed: {
         condTotem() {
             let totemName = getConditionTotem(this.currentCond['cond_code']);
-            return `http://pnqvs14u3.bkt.clouddn.com/${totemName}.jpg`;
+            return `/static/images/totem/${totemName}.jpg`;
         },
         todayMinTmp() {
             return this.dailyForecast[0] && this.dailyForecast[0].tmp_min || 0;
@@ -154,37 +158,56 @@ export default {
         }
     },
     methods: {
-        /**
-         * 分享小程序给微信好友/群
-         */
         switchTab(targetPage) {
             goToPage(targetPage);
+        },
+        refreshInfo() {
+            if (!this.location) {
+                // 若无指定区域信息，则获取当前定位位置的天气
+                getMyLocation().then(res => {
+                    let data = res.data && res.data.result && res.data.result.ad_info || {};
+                    this.location = data.district || data.city;
+                    wx.setStorageSync('nowLocation', this.location);
+                    this.getWeatherInfo(this.location);
+                }).catch(err => {
+                    console.log(err);
+                });
+            } else {
+                // 首页路由参数内包含参数location
+                this.getWeatherInfo(this.location);
+            }
+        },
+        getWeatherInfo(location) {
+            // 获取天气状况合集
+            getWeather(location).then(res => {
+                const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
+                this.currentCond = data.now;
+                this.hourlyForecast = data.hourly;
+                this.dailyForecast = data.daily_forecast;
+                this.lifestyle = data.lifestyle;
+            }).catch(err => {
+                console.log(err);
+            });
+            // 获取当前空气质量数据
+            getNowAir(location).then(res => {
+                const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
+                this.airQuality = {
+                    score: data.air_now_city && data.air_now_city.aqi || 0,
+                    grade: data.air_now_city && data.air_now_city.qlty || '不明'
+                };
+            }).catch(err => {
+                console.log(err);
+            });
         }
     },
-
-    mounted() {
+    onLoad() {
+        wx.setStorageSync('nowLocation', '');
+    },
+    onShow() {
         this.nowTime = getFormatTime();
         this.weekDate = getWeekDate();
-        // 获取天气状况合集
-        getWeather('上海').then(res => {
-            const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
-            this.currentCond = data.now;
-            this.hourlyForecast = data.hourly;
-            this.dailyForecast = data.daily_forecast;
-            this.lifestyle = data.lifestyle;
-        }).catch(err => {
-            console.log(err);
-        });
-        // 获取当前空气质量数据
-        getNowAir('上海').then(res => {
-            const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
-            this.airQuality = {
-                score: data.air_now_city && data.air_now_city.aqi || 0,
-                grade: data.air_now_city && data.air_now_city.qlty || '不明'
-            };
-        }).catch(err => {
-            console.log(err);
-        });
+        this.location = wx.getStorageSync('nowLocation') || '';
+        console.log('onShow');
     }
 };
 </script>
