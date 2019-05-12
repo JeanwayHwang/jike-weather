@@ -119,6 +119,7 @@ export default {
 <style lang="scss" scoped>
     .empty-wrap {
         margin-top: 45%;
+        text-align: center;
         h1 {
             font-size: 50px;
             color: $textBrown;
@@ -127,7 +128,6 @@ export default {
             margin-top: 10px;
             font-size: 12px;
             line-height: 30px;
-            height: 30px;
             color: $iconGrey;
         }
     }
