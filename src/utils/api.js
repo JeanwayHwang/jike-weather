@@ -8,6 +8,7 @@ import Fly from 'flyio/dist/npm/wx';
  * @return {Promise} Promise 响应结果
  */
 export function getWeather(location = '北京市') {
+    fly.config.baseURL = 'https://free-api.heweather.net/s6';
     return fly.get('/weather', {
         location
     });
@@ -20,6 +21,7 @@ export function getWeather(location = '北京市') {
  * @return {Promise} Promise 响应结果
  */
 export function getNowAir(location = '北京市') {
+    fly.config.baseURL = 'https://free-api.heweather.net/s6';
     return fly.get('/air/now', {
         location
     });
@@ -32,6 +34,7 @@ export function getNowAir(location = '北京市') {
  * @return {Promise} Promise 响应结果
  */
 export function getNowWeather(location = '北京市') {
+    fly.config.baseURL = 'https://free-api.heweather.net/s6';
     return fly.get('/weather/now', {
         location
     });
@@ -44,6 +47,7 @@ export function getNowWeather(location = '北京市') {
  * @return {Promise} Promise 响应结果
  */
 export function getLifeStyle(location = '北京市') {
+    fly.config.baseURL = 'https://free-api.heweather.net/s6';
     return fly.get('/weather/lifestyle', {
         location
     });
@@ -56,6 +60,7 @@ export function getLifeStyle(location = '北京市') {
  * @return {Promise} Promise 响应结果
  */
 export function getHourlyWeather(location = '北京市') {
+    fly.config.baseURL = 'https://free-api.heweather.net/s6';
     return fly.get('/weather/hourly', {
         location
     });
@@ -68,6 +73,7 @@ export function getHourlyWeather(location = '北京市') {
  * @return {Promise} Promise 响应结果
  */
 export function getForecast(location = '北京市') {
+    fly.config.baseURL = 'https://free-api.heweather.net/s6';
     return fly.get('/weather/forecast', {
         location
     });

@@ -69,6 +69,10 @@
                 <li @click="switchTab('setting')"><span class="iconfont icon-settings-outline"></span></li>
             </ul>
         </div>
+        <!--定位当前位置按钮-->
+        <button class="location-btn" @click="refreshWeather" v-if="!isLocationHere">
+            <h2 class="iconfont icon-pin-outline"></h2>
+        </button>
     </div>
 </template>
 
@@ -80,6 +84,7 @@ export default {
     data() {
         return {
             location: null,
+            isLocationHere: true,
             nowTime: '00:00',
             weekDate: '',
             currentCond: {
@@ -164,16 +169,8 @@ export default {
         refreshInfo() {
             if (!this.location) {
                 // 若无指定区域信息，则获取当前定位位置的天气
-                getMyLocation().then(res => {
-                    let data = res.data && res.data.result && res.data.result.ad_info || {};
-                    this.location = data.district || data.city;
-                    wx.setStorageSync('nowLocation', this.location);
-                    this.getWeatherInfo(this.location);
-                }).catch(err => {
-                    console.log(err);
-                });
+                this.refreshWeather();
             } else {
-                // 首页路由参数内包含参数location
                 this.getWeatherInfo(this.location);
             }
         },
@@ -181,10 +178,10 @@ export default {
             // 获取天气状况合集
             getWeather(location).then(res => {
                 const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
-                this.currentCond = data.now;
-                this.hourlyForecast = data.hourly;
-                this.dailyForecast = data.daily_forecast;
-                this.lifestyle = data.lifestyle;
+                this.currentCond = data.now || {};
+                this.hourlyForecast = data.hourly || [];
+                this.dailyForecast = data.daily_forecast || [];
+                this.lifestyle = data.lifestyle || {};
             }).catch(err => {
                 console.log(err);
             });
@@ -198,6 +195,18 @@ export default {
             }).catch(err => {
                 console.log(err);
             });
+        },
+        refreshWeather() {
+            // 重新获取当前定位及天气信息
+            getMyLocation().then(res => {
+                let data = res.data && res.data.result && res.data.result.ad_info || {};
+                let location = data.district || data.city;
+                wx.setStorageSync('nowLocation', location);
+                this.location = location;
+                this.isLocationHere = true;
+            }).catch(err => {
+                console.log(err);
+            });
         }
     },
     onLoad() {
@@ -206,8 +215,11 @@ export default {
     onShow() {
         this.nowTime = getFormatTime();
         this.weekDate = getWeekDate();
-        this.location = wx.getStorageSync('nowLocation') || '';
-        console.log('onShow');
+        let newLocation = wx.getStorageSync('nowLocation') || '';
+        if (newLocation !== this.location) {
+            this.location = newLocation;
+            this.isLocationHere = false;
+        }
     }
 };
 </script>
@@ -419,6 +431,24 @@ export default {
                     }
                 }
             }
+        }
+    }
+    .location-btn {
+        width: 40px;
+        height: 40px;
+        position: fixed;
+        right: 20px;
+        bottom: 70px;
+        background-color: $iconBrown;
+        color: #fff;
+        border-radius: 50%;
+        h2 {
+            position: absolute;
+            left: 0;
+            text-align: center;
+            width: 40px;
+            font-size: 22px;
+            line-height: 40px;
         }
     }
 

@@ -38,7 +38,6 @@ export default {
     },
     watch: {
         followList() {
-            console.log('followList changed');
             this.handleFollowCondList();
         }
     },

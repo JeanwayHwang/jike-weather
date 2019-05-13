@@ -9,7 +9,7 @@
             <button class="search-icon iconfont icon-search-outline" @click="search"></button>
         </div>
         <ul class="search-result">
-            <li v-for="item in searchList" :key="item.location">
+            <li v-for="item in searchList" :key="item.location" @click="selectLocation(item.location)">
                 <h2>{{item.location}}</h2>
                 <h3>{{item.admin_area}}.{{item.parent_city}}{{item.parent_city !== item.location ? '.' + item.location : ''}}</h3>
             </li>
@@ -18,7 +18,7 @@
             <h1 class="sealect-title">历史记录</h1>
             <div class="select-list">
                 <button @click="followLocation">当前位置</button>
-                <button v-for="item in searchHistoryList" :key="item" @click="selectLocation(item)">{{item}}</button>
+                <button v-for="item in searchHistoryList" :key="item" @click="followLocation(item)">{{item}}</button>
                 <button @click="clearHistory">清空历史记录</button>
             </div>
         </div>
@@ -74,13 +74,13 @@ export default {
                     let area = item.location ? item.location + '区' : '';
                     item.detail = province + city + area;
                 });
-                console.log('data', searchList);
                 this.searchList = searchList;
             }).catch(err => {
                 console.log(err);
             });
         },
         selectLocation(location) {
+            // 点击选择过的搜索结果会记录至历史记录
             this.searchHistoryList.unshift(location);
             this.followLocation(location);
         },
