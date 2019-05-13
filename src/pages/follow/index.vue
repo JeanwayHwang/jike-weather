@@ -1,15 +1,15 @@
 <template>
     <div class="follow-wrap">
         <div class="follow-list" v-if="followList.length > 0">
-            <div class="location-box" v-for="(item, index) in followCondList" :key="index">
+            <div class="location-box" v-for="(item, index) in followList" :key="index">
                 <div class="box-left">
-                    <h1 class="location-name">{{item.location}}</h1>
-                    <h2 class="air-quality"><span class="qa-great">{{item.airScore}} 空气{{item.airGrade}}</span></h2>
-                    <h3 class="tmp-range">{{item.windDir}}{{item.windGrade}}级 · {{item.condText}}</h3>
+                    <h1 class="location-name">{{followCondList[item].location}}</h1>
+                    <h2 class="air-quality"><span class="qa-great">{{followCondList[item].airScore}} 空气{{followCondList[item].airGrade}}</span></h2>
+                    <h3 class="tmp-range">{{followCondList[item].windDir}}{{followCondList[item].windGrade}}级 · {{followCondList[item].condText}}</h3>
                 </div>
                 <div class="box-right">
                     <h1>
-                        <span>{{item.tmp}}°C</span>
+                        <span>{{followCondList[item].tmp}}°C</span>
                         <img src="../../../static/images/cond/rainy1.png" alt="天气图标"/>
                     </h1>
                 </div>
@@ -38,6 +38,7 @@ export default {
     },
     watch: {
         followList() {
+            console.log('followList changed', this.followList);
             this.handleFollowCondList();
         }
     },
@@ -92,40 +93,43 @@ export default {
                     delete followCondListCache[location];
                 }
             }
-            this.followList.forEach(itemLocation => {
-                let locationCond = followCondListCache[itemLocation];
+            this.followList.forEach(location => {
+                let locationCond = followCondListCache[location];
                 if (!locationCond || compareWithMoment(locationCond.updateTime) > 60 * 60 * 1000) {
                     // 当前城市本地未缓存天气数据 或 缓存天气数据已过期（1小时）
-                    fetchLocationList.push(itemLocation);
-                    fetchPromiseList.push(this.getWeatherPromise(itemLocation), this.getAirPromise(itemLocation));
+                    fetchLocationList.push(location);
+                    fetchPromiseList.push(this.getWeatherPromise(location), this.getAirPromise(location));
                 }
             });
-            Promise.all(fetchPromiseList).then(dataArr => {
-                fetchLocationList.forEach((locationName, index) => {
-                    let nowCond = {location: locationName};
-                    let weather = dataArr[2 * index];
-                    let air = dataArr[2 * index + 1];
-                    nowCond.tmp = weather.tmp;
-                    nowCond.condText = weather.cond_txt;
-                    nowCond.condCode = weather.cond_code;
-                    nowCond.windDir = weather.wind_dir;
-                    nowCond.windGrade = weather.wind_sc;
-                    nowCond.airScore = air.aqi || 0;
-                    nowCond.airGrade = air.qlty || '不明';
-                    nowCond.updateTime = new Date().getTime();
-                    followCondListCache[locationName] = nowCond;
-                    this.followCondList = followCondListCache;
-                    wx.setStorageSync('followCondList', followCondListCache);
+            if (fetchPromiseList.length > 0) {
+                Promise.all(fetchPromiseList).then(dataArr => {
+                    fetchLocationList.forEach((locationName, index) => {
+                        let nowCond = {location: locationName};
+                        let weather = dataArr[2 * index];
+                        let air = dataArr[2 * index + 1];
+                        nowCond.tmp = weather.tmp;
+                        nowCond.condText = weather.cond_txt;
+                        nowCond.condCode = weather.cond_code;
+                        nowCond.windDir = weather.wind_dir;
+                        nowCond.windGrade = weather.wind_sc;
+                        nowCond.airScore = air.aqi || 0;
+                        nowCond.airGrade = air.qlty || '不明';
+                        nowCond.updateTime = new Date().getTime();
+                        followCondListCache[locationName] = nowCond;
+                        wx.setStorageSync('followCondList', followCondListCache);
+                        this.followCondList = followCondListCache;
+                    });
+                }).catch(err => {
+                    console.log(err);
                 });
-            }).catch(err => {
-                console.log(err);
-            });
+            } else {
+                wx.setStorageSync('followCondList', followCondListCache);
+                this.followCondList = followCondListCache;
+            }
         }
     },
-    mounted() {
-        this.handleFollowCondList();
-    },
     onShow() {
+        console.log('follow page on show', wx.getStorageSync('followList'));
         this.followList = wx.getStorageSync('followList') || [];
     }
 };
