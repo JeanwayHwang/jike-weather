@@ -178,10 +178,11 @@ export default {
             // 获取天气状况合集
             getWeather(location).then(res => {
                 const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
-                this.currentCond = data.now || {};
+                this.currentCond = Object.assign({}, data.now, {location: location});
                 this.hourlyForecast = data.hourly || [];
                 this.dailyForecast = data.daily_forecast || [];
                 this.lifestyle = data.lifestyle || {};
+                wx.setStorageSync('currentCond', this.currentCond);
             }).catch(err => {
                 console.log(err);
             });

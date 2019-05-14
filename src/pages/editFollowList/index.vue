@@ -13,7 +13,7 @@ import {goToPage} from '@/utils/common';
 export default {
     data() {
         return {
-            followList: wx.getStorageSync('followList') || []
+            followList: []
         };
     },
     watch: {
@@ -54,11 +54,9 @@ export default {
                 if (pageY - res[0].top >= 10) {
                     // 有效的向下滑动距离
                     that.followList = that.exchangeList(that.followList, index, 'after');
-                    console.log('down', that.followList);
                 } else if (res[0].top - pageY >= 10) {
                     // 有效的向上滑动距离
                     that.followList = that.exchangeList(that.followList, index, 'before');
-                    console.log('up', that.followList);
                 }
             });
         },
@@ -75,8 +73,8 @@ export default {
             });
         }
     },
-    mounted() {
-        console.log(this.followList);
+    onShow() {
+        this.followList = wx.getStorageSync('followList') || [];
     }
 };
 </script>

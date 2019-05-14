@@ -1,15 +1,15 @@
 <template>
     <div class="follow-wrap">
-        <div class="follow-list" v-if="followList.length > 0">
-            <div class="location-box" v-for="(item, index) in followList" :key="index">
+        <div class="follow-list" v-if="followCondList.length > 0">
+            <div class="location-box" v-for="(item, index) in followCondList" :key="index" @click="selectLocation(item.location)">
                 <div class="box-left">
-                    <h1 class="location-name">{{followCondList[item].location}}</h1>
-                    <h2 class="air-quality"><span class="qa-great">{{followCondList[item].airScore}} 空气{{followCondList[item].airGrade}}</span></h2>
-                    <h3 class="tmp-range">{{followCondList[item].windDir}}{{followCondList[item].windGrade}}级 · {{followCondList[item].condText}}</h3>
+                    <h1 class="location-name">{{item.location}}</h1>
+                    <h2 class="air-quality"><span class="qa-great">{{item.airScore}} 空气{{item.airGrade}}</span></h2>
+                    <h3 class="tmp-range">{{item.windDir}}{{item.windGrade}}级 · {{item.condText}}</h3>
                 </div>
                 <div class="box-right">
                     <h1>
-                        <span>{{followCondList[item].tmp}}°C</span>
+                        <span>{{item.tmp}}°C</span>
                         <img src="../../../static/images/cond/rainy1.png" alt="天气图标"/>
                     </h1>
                 </div>
@@ -33,13 +33,16 @@ export default {
     data() {
         return {
             followList: wx.getStorageSync('followList') || [],
-            followCondList: wx.getStorageSync('followCondList') || {}
+            condList: wx.getStorageSync('condList') || {},
+            followCondList: []
         };
     },
     watch: {
         followList() {
-            console.log('followList changed', this.followList);
             this.handleFollowCondList();
+        },
+        condList() {
+            this.sortFollowCondList();
         }
     },
     methods: {
@@ -79,30 +82,31 @@ export default {
             });
         },
         handleFollowCondList() {
-            let followCondListCache = wx.getStorageSync('followCondList') || {};
-            // 多城市请求集合
+            let condList = wx.getStorageSync('condList') || {};
             let fetchLocationList = [];
             let fetchPromiseList = [];
             // 关注列表的增减，意味着followCondList也需要同步增减
-            for (let location in followCondListCache) {
+            for (let location in condList) {
                 let alreadyExist = this.followList.some((item) => {
                     return item === location;
                 });
                 if (!alreadyExist) {
-                    // followCondList存在当前关注列表之外的城市，则移除掉
-                    delete followCondListCache[location];
+                    // condList存在当前关注列表之外的城市，则移除掉
+                    delete condList[location];
                 }
             }
+            // 对于未缓存或已过期的城市，重新获取天气信息
             this.followList.forEach(location => {
-                let locationCond = followCondListCache[location];
+                let locationCond = condList[location];
                 if (!locationCond || compareWithMoment(locationCond.updateTime) > 60 * 60 * 1000) {
                     // 当前城市本地未缓存天气数据 或 缓存天气数据已过期（1小时）
                     fetchLocationList.push(location);
                     fetchPromiseList.push(this.getWeatherPromise(location), this.getAirPromise(location));
                 }
             });
+            // 获取信息
             if (fetchPromiseList.length > 0) {
-                Promise.all(fetchPromiseList).then(dataArr => {
+                return Promise.all(fetchPromiseList).then(dataArr => {
                     fetchLocationList.forEach((locationName, index) => {
                         let nowCond = {location: locationName};
                         let weather = dataArr[2 * index];
@@ -115,21 +119,38 @@ export default {
                         nowCond.airScore = air.aqi || 0;
                         nowCond.airGrade = air.qlty || '不明';
                         nowCond.updateTime = new Date().getTime();
-                        followCondListCache[locationName] = nowCond;
-                        wx.setStorageSync('followCondList', followCondListCache);
-                        this.followCondList = followCondListCache;
+                        condList[locationName] = nowCond;
                     });
+                    // 存储最新的condList
+                    wx.setStorageSync('condList', condList);
+                    this.condList = condList;
                 }).catch(err => {
                     console.log(err);
                 });
-            } else {
-                wx.setStorageSync('followCondList', followCondListCache);
-                this.followCondList = followCondListCache;
             }
+            // 存储最新的condList
+            wx.setStorageSync('condList', condList);
+            this.condList = condList;
+        },
+        sortFollowCondList() {
+            // 根据followList顺序映射出带天气信息的followCondList
+            let followCondList = [];
+            this.followList.forEach(location => {
+                let locationCond = this.condList[location];
+                if (locationCond) {
+                    followCondList.push(locationCond);
+                }
+            });
+            this.followCondList = followCondList;
+        },
+        selectLocation(location) {
+            wx.setStorageSync('nowLocation', location);
+            wx.navigateBack({
+                delta: 1
+            });
         }
     },
     onShow() {
-        console.log('follow page on show', wx.getStorageSync('followList'));
         this.followList = wx.getStorageSync('followList') || [];
     }
 };
