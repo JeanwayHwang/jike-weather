@@ -15,17 +15,36 @@ export default {
     },
     methods: {
         drawImage() {
-            let context = wx.createCanvasContext('poster');
-            context.setStrokeStyle('#00ff00');
-            context.setLineWidth(5);
-            context.rect(0, 0, 200, 200);
-            context.stroke();
-            context.draw(false, this.getTempFilePath());
+            var ctx = wx.createCanvasContext('poster');
+            ctx.drawImage('/static/images/totem/sunny.jpg', 0, 0, 288, 200);
+            ctx.setFontSize(70);
+            ctx.setFillStyle('#fbba15');
+            ctx.fillText('222', '333', 420);
+            ctx.setFontSize(60);
+            ctx.fillText('2222秒', 325, 560);
+            ctx.draw(false, function () {
+                wx.canvasToTempFilePath({
+                    canvasId: 'canvasimg',
+                    success: function (res) {
+                        var tempFilePath = res.tempFilePath;
+                        wx.previewImage({
+                            current: tempFilePath,
+                            urls: [tempFilePath]
+                        });
+                        wx.hideToast();
+                    },
+                    fail: function (res) {
+                        console.log('ERROR');
+                        console.log(res);
+                    }
+                });
+            });
         },
         getTempFilePath() {
             wx.canvasToTempFilePath({
                 canvasId: 'share',
                 success: (res) => {
+                    console.log('222', res);
                     this.shareTempFilePath = res.tempFilePath;
                 }
             });
@@ -51,4 +70,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .save-btn {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 30px;
+        background-color: $iconBrown;
+        color: #fff;
+        font-size: 14px;
+        line-height: 20px;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 30px;
+    }
 </style>
