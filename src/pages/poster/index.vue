@@ -1,127 +1,76 @@
 <template>
     <div class="jike-poster">
-        <image :src='shareImgUrl' mode='widthFix' style="display: none;"></image>
-        <canvas id="my" style="width:545px;height:771px"></canvas>
-        <button class='create-btn' @click="getImage">生成分享图</button>
-        <button class='save-btn' @click="saveImage">保存到相册</button>
+        <painter :customStyle="customStyle" :imgOK="onImgOk" :palette="template" :dirty="true"/>
+        <div class="btn-wrap">
+            <button class='save-btn' @click="saveImage">保存到相册</button>
+        </div>
     </div>
 </template>
 
 <script>
 import {getConditionTotem} from '@/utils/common';
-
+import Card from '../../palette/card';
 export default {
     data() {
         return {
-            shareImgUrl: '',
-            currentCond: {}
+            customStyle: 'border: solid 1rpx #ccc;border-radius: 20rpx; margin-top: 60rpx; margin-left: 48rpx',
+            nickName: '',
+            avatarUrl: '',
+            template: {}
         };
     },
     methods: {
-        drawImage() {
-            let fetchImg1 = new Promise((resolve, reject) => {
-                wx.getImageInfo({
-                    src: '/static/images/qrcode.jpg',
-                    success(res) {
-                        resolve(res);
-                    }
-                });
-            });
-            let fetchImg2 = new Promise((resolve, reject) => {
-                let totemName = getConditionTotem(this.currentCond['cond_code']);
-                wx.getImageInfo({
-                    src: `/static/images/totem/${totemName}.jpg`,
-                    success(res) {
-                        resolve(res);
-                    }
-                });
-            });
-            Promise.all([fetchImg1, fetchImg2]).then(res => {
-                const ctx = wx.createCanvasContext('canvas');
-                console.log('ctx', ctx);
-                // 主要就是计算好各个图文的位置
-                ctx.drawImage('../../../' + res[0].path, 158, 190, 210, 210);
-                ctx.drawImage('../../../' + res[1].path, 0, 0, 545, 771);
-                ctx.setTextAlign('center');
-                ctx.setFillStyle('#ffffff');
-                ctx.setFontSize(22);
-                ctx.fillText('分享文字描述1', 545 / 2, 130);
-                ctx.fillText('分享文字描述2', 545 / 2, 160);
-                ctx.stroke();
-                ctx.draw();
+        getUserInfo() {
+            wx.getUserInfo({
+                success(res) {
+                    const userInfo = res.userInfo;
+                    this.nickName = userInfo.nickName;
+                    this.avatarUrl = userInfo.avatarUrl;
+                }
             });
         },
-        getImage() {
-            let that = this;
-            wx.showLoading({
-                title: '努力生成中...'
-            });
-            wx.canvasToTempFilePath({
-                x: 0,
-                y: 0,
-                width: 545,
-                height: 771,
-                destWidth: 545,
-                destHeight: 771,
-                canvasId: 'canvas',
-                success(res) {
-                    console.log(res.tempFilePath);
-                    that.shareImgUrl = res.tempFilePath;
-                    wx.hideLoading();
-                },
-                fail(res) {
-                    console.log(res);
-                }
-            }, that);
+        onImgOK(e) {
+            // https://www.jianshu.com/p/516b66dca84c
+            // https://www.jianshu.com/p/2a140f7e7e73
+            console.log('222222', e.target.path);
+            console.log(e.mp.detail.path);
+            console.log(e.target.path);
         },
         saveImage() {
-
         }
     },
     onLoad() {
-        this.currentCond = wx.getStorageSync('currentCond') || {};
-        console.log('this.currentCond', this.currentCond);
-        this.drawImage();
+        let currentCond = wx.getStorageSync('currentCond') || {};
+        let totemName = getConditionTotem(currentCond['cond_code']);
+        let cardInfo = {
+            totemImgUrl: `/static/images/totem/${totemName}.jpg`,
+            qrcodeImgUrl: '/static/images/qrcode.png',
+            location: currentCond.location || '上海市',
+            todayMinTmp: '10',
+            todayMaxTmp: '20'
+        };
+        console.log('1', currentCond, cardInfo);
+        this.template = new Card().do(cardInfo);
     }
 };
 </script>
 
 <style lang="scss" scoped>
-    canvas{
+    .btn-wrap {
+        width: 80%;
+        height: auto;
         position: fixed;
-        top: 0;
-        left: 0;
-    }
-    .create-btn {
-        display: inline-block;
-        padding: 8px 20px;
-        border-radius: 30px;
-        background-color: $iconBrown;
-        color: #fff;
-        font-size: 14px;
-        line-height: 20px;
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 80px;
-    }
-    .save-btn {
-        display: inline-block;
-        padding: 8px 20px;
-        border-radius: 30px;
-        background-color: $iconBrown;
-        color: #fff;
-        font-size: 14px;
-        line-height: 20px;
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 30px;
-    }
-    .share-image {
-        width: 600rpx;
-        height: 888rpx;
-        margin: 0 75rpx;
-        border: 1px solid black;
+        bottom: 40px;
+        left: 10%;
+        display: flex;
+        justify-content: space-between;
+        button {
+            padding: 8px 24px;
+            border-radius: 30px;
+            background-color: $iconBrown;
+            color: #fff;
+            font-size: 14px;
+            line-height: 20px;
+        }
     }
 </style>
