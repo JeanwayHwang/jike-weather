@@ -1,10 +1,10 @@
 {
     "pages": [
+        "pages/poster/main",
         "pages/index/main",
         "pages/search/main",
         "pages/follow/main",
         "pages/editFollowList/main",
-        "pages/poster/main",
         "pages/setting/main",
         "pages/info/main"
     ],
