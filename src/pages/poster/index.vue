@@ -1,6 +1,6 @@
 <template>
     <div class="jike-poster">
-        <painter :customStyle="customStyle" :imgOK="onImgOk" :palette="template" :dirty="true"/>
+        <painter :customStyle="customStyle" @imgOK="onImgOk" :palette="template" :dirty="true"/>
         <div class="btn-wrap">
             <button class='save-btn' @click="saveImage">保存到相册</button>
         </div>
@@ -13,7 +13,8 @@ import Card from '../../palette/card';
 export default {
     data() {
         return {
-            customStyle: 'border: solid 1rpx #ccc;border-radius: 20rpx; margin-top: 60rpx; margin-left: 48rpx',
+            shareImgUrl: '',
+            customStyle: 'border: solid 1rpx #eee; margin-top: 60rpx; margin-left: 48rpx',
             nickName: '',
             avatarUrl: '',
             template: {}
@@ -29,14 +30,50 @@ export default {
                 }
             });
         },
-        onImgOK(e) {
+        onImgOk(e) {
             // https://www.jianshu.com/p/516b66dca84c
             // https://www.jianshu.com/p/2a140f7e7e73
-            console.log('222222', e.target.path);
-            console.log(e.mp.detail.path);
-            console.log(e.target.path);
+            this.shareImgUrl = e.target.path;
         },
         saveImage() {
+            if (!this.shareImgUrl) {
+                wx.showToast({
+                    title: '图片生成中，请稍后再尝试吧',
+                    icon: 'none'
+                });
+                return;
+            }
+            wx.saveImageToPhotosAlbum({
+                filePath: this.shareImgUrl,
+                success(res) {
+                    wx.hideLoading();
+                    wx.showModal({
+                        title: '提示',
+                        showCancel: false,
+                        confirmText: '知道了',
+                        confirmColor: '#0facf3',
+                        content: '图片已保存到手机相册，快快分享吧',
+                        success: (res) => {
+                            if (res.confirm) {
+                                console.log('保存成功');
+                            }
+                        }
+                    });
+                },
+                fail(res) {
+                    wx.hideLoading();
+                    wx.showModal({
+                        title: '保存失败',
+                        showCancel: false,
+                        confirmText: '知道了',
+                        confirmColor: '#0facf3',
+                        content: '您拒绝了授权，若要保存图片，请删除小程序，再重新打开',
+                        success: (res) => {
+                            console.log(res);
+                        }
+                    });
+                }
+            });
         }
     },
     onLoad() {
@@ -45,7 +82,9 @@ export default {
         let cardInfo = {
             totemImgUrl: `/static/images/totem/${totemName}.jpg`,
             qrcodeImgUrl: '/static/images/qrcode.png',
-            location: currentCond.location || '上海市',
+            location: currentCond.location,
+            tmp: currentCond.tmp + '°',
+            condTxt: currentCond.cond_txt || '?',
             todayMinTmp: '10',
             todayMaxTmp: '20'
         };

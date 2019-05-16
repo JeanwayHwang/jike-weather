@@ -45,20 +45,45 @@ export default class LastMayday {
                 type: 'text',
                 text: this.cardInfo.location,
                 css: {
-                    left: '320rpx',
-                    top: '450rpx',
-                    fontSize: '30rpx',
+                    left: '390rpx',
+                    top: '510rpx',
+                    fontSize: '24rpx',
+                    color: '#ccc',
                     align: 'center'
                 }
             },
             {
                 type: 'text',
-                text: this.cardInfo.todayMinTmp + '~' + this.cardInfo.todayMaxTmp,
+                text: this.cardInfo.tmp,
+                css: {
+                    left: '270rpx',
+                    top: '440rpx',
+                    fontSize: '100rpx',
+                    color: '#977053',
+                    align: 'center'
+                }
+            },
+            {
+                type: 'rect',
+                css: {
+                    width: '80rpx',
+                    height: '80rpx',
+                    background: '#000',
+                    borderRadius: '40rpx',
+                    borderColor: '#fff',
+                    left: '300rpx',
+                    top: '570rpx',
+                    color: '#977053'
+                }
+            },
+            {
+                type: 'text',
+                text: this.cardInfo.condTxt,
                 css: {
                     left: '320rpx',
-                    top: '480rpx',
-                    fontSize: '30rpx',
-                    align: 'center'
+                    top: '584rpx',
+                    fontSize: '40rpx',
+                    color: '#fff'
                 }
             }
             ]
