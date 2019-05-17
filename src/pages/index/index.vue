@@ -70,7 +70,7 @@
             </ul>
         </div>
         <!--定位当前位置按钮-->
-        <button class="location-btn" @click="refreshWeather" v-if="!isLocationHere">
+        <button class="location-btn" @click="refreshLocation" v-if="!isLocationHere">
             <h2 class="iconfont icon-pin-outline"></h2>
         </button>
     </div>
@@ -101,6 +101,10 @@ export default {
     components: {},
     watch: {
         location() {
+            wx.pageScrollTo({
+                scrollTop: 0,
+                duration: 300
+            });
             this.refreshInfo();
         }
     },
@@ -169,7 +173,7 @@ export default {
         refreshInfo() {
             if (!this.location) {
                 // 若无指定区域信息，则获取当前定位位置的天气
-                this.refreshWeather();
+                this.refreshLocation();
             } else {
                 this.getWeatherInfo(this.location);
             }
@@ -205,7 +209,7 @@ export default {
                 console.log(err);
             });
         },
-        refreshWeather() {
+        refreshLocation() {
             // 重新获取当前定位及天气信息
             getMyLocation().then(res => {
                 let data = res.data && res.data.result && res.data.result.ad_info || {};
@@ -294,6 +298,7 @@ export default {
         overflow-x: auto;
         margin-top: 20px;
         padding: 10px 10px;
+        box-sizing: border-box;
         background-color: $bgWhite;
         box-shadow: 2px 2px 3px #ccc;
         h1 {
