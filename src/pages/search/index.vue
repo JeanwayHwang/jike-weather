@@ -53,11 +53,6 @@ export default {
             searchList: []
         };
     },
-    watch: {
-        historyList() {
-            wx.setStorageSync('searchHistoryList', this.searchHistoryList);
-        }
-    },
     methods: {
         clearInput() {
             this.searchWord = '';
@@ -65,6 +60,7 @@ export default {
         },
         clearHistory() {
             this.searchHistoryList = [];
+            wx.setStorageSync('searchHistoryList', this.searchHistoryList);
         },
         search() {
             searchLocation(this.searchWord).then(res => {
@@ -85,11 +81,21 @@ export default {
             let location = locationInfo.location;
             let city = locationInfo.parent_city;
             setCity(location, city);
-            this.searchHistoryList.unshift(location);
+            this.setSearchHistory(location);
             this.followLocation(location);
         },
+        setSearchHistory(location) {
+            let currentList = this.searchHistoryList;
+            // 新增元素 & 去重
+            currentList.unshift(location);
+            this.searchHistoryList = currentList.filter(function (element, index, self) {
+                return self.indexOf(element) === index;
+            });
+            wx.setStorageSync('searchHistoryList', this.searchHistoryList);
+        },
         followLocation(location) {
-            location = location || wx.getStorageSync('nowLocation');
+            // 若选择【当前位置】，则获取存档的当前实际定位位置
+            location = location || wx.getStorageSync('myLocation');
             if (location && this.$root.$mp.query.followFlag) {
                 let followList = wx.getStorageSync('followList') || [];
                 const alreadyExist = followList.some((item) => {
@@ -112,7 +118,11 @@ export default {
             }
         }
     },
-    mounted() {
+    onShow() {
+        this.searchWord = '';
+        this.searchList = [];
+        console.log('onShow', wx.getStorageSync('searchHistoryList'));
+        this.searchHistoryList = wx.getStorageSync('searchHistoryList') || [];
     }
 };
 </script>

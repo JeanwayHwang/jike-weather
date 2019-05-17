@@ -215,7 +215,8 @@ export default {
                 let data = res.data && res.data.result && res.data.result.ad_info || {};
                 let location = data.district || data.city;
                 setCity(location, data.city);
-                wx.setStorageSync('nowLocation', location);
+                wx.setStorageSync('myLocation', location); // 当前定位的实际位置
+                wx.setStorageSync('nowLocation', location); // 当前展示的选定位置
                 this.location = location;
                 this.isLocationHere = true;
             }).catch(err => {
