@@ -9,7 +9,7 @@
             <button class="search-icon iconfont icon-search-outline" @click="search"></button>
         </div>
         <ul class="search-result">
-            <li v-for="item in searchList" :key="item.location" @click="selectLocation(item.location)">
+            <li v-for="item in searchList" :key="item.location" @click="selectLocation(item)">
                 <h2>{{item.location}}</h2>
                 <h3>{{item.admin_area}}.{{item.parent_city}}{{item.parent_city !== item.location ? '.' + item.location : ''}}</h3>
             </li>
@@ -17,7 +17,7 @@
         <div class="select-wrap">
             <h1 class="sealect-title">历史记录</h1>
             <div class="select-list">
-                <button @click="followLocation">当前位置</button>
+                <button @click="followLocation('')">当前位置</button>
                 <button v-for="item in searchHistoryList" :key="item" @click="followLocation(item)">{{item}}</button>
                 <button @click="clearHistory">清空历史记录</button>
             </div>
@@ -44,6 +44,7 @@
 
 <script>
 import {searchLocation} from '@/utils/api';
+import {goBackPage, setCity} from '@/utils/common';
 export default {
     data() {
         return {
@@ -79,12 +80,16 @@ export default {
                 console.log(err);
             });
         },
-        selectLocation(location) {
+        selectLocation(locationInfo) {
             // 点击选择过的搜索结果会记录至历史记录
+            let location = locationInfo.location;
+            let city = locationInfo.parent_city;
+            setCity(location, city);
             this.searchHistoryList.unshift(location);
             this.followLocation(location);
         },
         followLocation(location) {
+            location = location || wx.getStorageSync('nowLocation');
             if (location && this.$root.$mp.query.followFlag) {
                 let followList = wx.getStorageSync('followList') || [];
                 const alreadyExist = followList.some((item) => {
@@ -94,9 +99,7 @@ export default {
                     // 关注列表中未存在，则添加
                     followList.push(location);
                     wx.setStorageSync('followList', followList);
-                    wx.navigateBack({
-                        delta: 1
-                    });
+                    goBackPage();
                 } else {
                     wx.showToast({
                         title: location + '已经在您的关注列表了',
@@ -105,9 +108,7 @@ export default {
                 }
             } else {
                 wx.setStorageSync('nowLocation', location);
-                wx.navigateBack({
-                    delta: 1
-                });
+                goBackPage();
             }
         }
     },

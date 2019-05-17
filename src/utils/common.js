@@ -1,6 +1,16 @@
 import {condCodeMap} from './condCodeMap';
 
 /**
+ * 返回上一页
+ *
+ */
+export function goBackPage() {
+    wx.navigateBack({
+        delta: 1
+    });
+}
+
+/**
  * 页面跳转
  *
  * @param {string} 目标页面标识
@@ -145,4 +155,30 @@ export function getFormatTime() {
 export const compareWithMoment = (targetTime, originTime) => {
     const gap = (originTime || new Date().getTime()) - targetTime;
     return gap;
+};
+
+/**
+ * @desc 存储当前地理位置&所属城市的映射表
+ * @param {String} 当前地理位置
+ * @param {String} 所属城市
+ */
+
+export const setCity = (location, city) => {
+    let cityMap = wx.getStorageSync('cityMap') || {};
+    if (!cityMap[location]) {
+        // 存储表尚无记录，则添加新映射内容
+        cityMap[location] = city;
+        wx.setStorageSync('cityMap', cityMap);
+    }
+};
+
+/**
+ * @desc 获取当前地理位置的所属城市
+ * @param {String} 当前地理位置
+ * @return {String} 所属城市
+ */
+
+export const getCity = (location) => {
+    let cityMap = wx.getStorageSync('cityMap') || {};
+    return cityMap[location] || '';
 };

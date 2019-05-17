@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {goToPage} from '@/utils/common';
+import {goBackPage} from '@/utils/common';
 export default {
     data() {
         return {
@@ -21,7 +21,7 @@ export default {
             wx.setStorageSync('followList', this.followList);
             if (this.followList.length === 0) {
                 // 收藏城市列表已清空，返回上一页（收藏页）
-                goToPage('follow');
+                goBackPage();
             }
         }
     },
@@ -61,16 +61,7 @@ export default {
             });
         },
         deleteCity(item, index) {
-            let that = this;
-            wx.showModal({
-                title: '温馨提示',
-                content: '确定要把' + item + '从收藏夹移除吗？',
-                success(res) {
-                    if (res.confirm) {
-                        that.followList.splice(index, 1);
-                    }
-                }
-            });
+            this.followList.splice(index, 1);
         }
     },
     onShow() {

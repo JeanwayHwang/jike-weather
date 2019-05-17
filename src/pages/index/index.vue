@@ -78,7 +78,7 @@
 
 <script>
 import {getWeather, getNowAir, getMyLocation} from '@/utils/api';
-import {goToPage, getConditionTotem, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime} from '@/utils/common';
+import {goToPage, getConditionTotem, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime, setCity, getCity} from '@/utils/common';
 
 export default {
     data() {
@@ -187,11 +187,19 @@ export default {
                 console.log(err);
             });
             // 获取当前空气质量数据
+            this.getAirInfo(location);
+        },
+        getAirInfo(location) {
             getNowAir(location).then(res => {
-                const data = res && res.HeWeather6 && res.HeWeather6[0] || {};
+                const data = res && res.HeWeather6 && res.HeWeather6[0] && res.HeWeather6[0].air_now_city;
+                if (location === this.location && !data) {
+                    // 和风天气Api存在县区（district）可能获取不到空气质量的数据，因此请求接口时传参使用location=city
+                    this.getAirInfo(getCity(location));
+                    return;
+                }
                 this.airQuality = {
-                    score: data.air_now_city && data.air_now_city.aqi || 0,
-                    grade: data.air_now_city && data.air_now_city.qlty || '不明'
+                    score: data.aqi || 0,
+                    grade: data.qlty || '不明'
                 };
             }).catch(err => {
                 console.log(err);
@@ -202,6 +210,7 @@ export default {
             getMyLocation().then(res => {
                 let data = res.data && res.data.result && res.data.result.ad_info || {};
                 let location = data.district || data.city;
+                setCity(location, data.city);
                 wx.setStorageSync('nowLocation', location);
                 this.location = location;
                 this.isLocationHere = true;

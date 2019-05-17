@@ -27,7 +27,7 @@
 
 <script>
 import {getNowWeather, getNowAir} from '@/utils/api';
-import {goToPage, compareWithMoment} from '@/utils/common';
+import {goToPage, compareWithMoment, goBackPage, getCity} from '@/utils/common';
 const FOLLOW_LIMIT = 10;
 export default {
     data() {
@@ -71,11 +71,20 @@ export default {
                 });
             });
         },
-        getAirPromise(locationName) {
+        getAirPromise(location) {
             return new Promise((resolve, reject) => {
-                getNowAir(locationName).then(res => {
-                    const data = res && res.HeWeather6 && res.HeWeather6[0] && res.HeWeather6[0].air_now_city || {};
-                    resolve(data);
+                let city = getCity(location);
+                getNowAir(location).then(res => {
+                    const data = res && res.HeWeather6 && res.HeWeather6[0] && res.HeWeather6[0].air_now_city;
+                    if (!data && location !== city) {
+                        // 当前县区（district）若获取不到空气质量，则再次请求接口时传参使用location=city
+                        getNowAir(city).then(res => {
+                            const data = res && res.HeWeather6 && res.HeWeather6[0] && res.HeWeather6[0].air_now_city;
+                            resolve(data);
+                        });
+                    } else {
+                        resolve(data);
+                    }
                 }).catch(err => {
                     reject(err);
                 });
@@ -145,9 +154,7 @@ export default {
         },
         selectLocation(location) {
             wx.setStorageSync('nowLocation', location);
-            wx.navigateBack({
-                delta: 1
-            });
+            goBackPage();
         }
     },
     onShow() {
