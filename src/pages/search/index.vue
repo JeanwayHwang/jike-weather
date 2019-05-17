@@ -230,7 +230,7 @@ export default {
             button {
                 flex: none;
                 margin: 8px 6px;
-                padding: 0 18px;
+                padding: 0 14px;
                 border-radius: 5px;
                 border: solid 1px $iconBrown;
                 height: 30px;

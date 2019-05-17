@@ -31,8 +31,6 @@ export default {
             });
         },
         onImgOk(e) {
-            // https://www.jianshu.com/p/516b66dca84c
-            // https://www.jianshu.com/p/2a140f7e7e73
             this.shareImgUrl = e.target.path;
         },
         saveImage() {
@@ -52,7 +50,7 @@ export default {
                         showCancel: false,
                         confirmText: '知道了',
                         confirmColor: '#0facf3',
-                        content: '图片已保存到手机相册，快快分享吧',
+                        content: '图片已保存到手机相册，去分享吧',
                         success: (res) => {
                             if (res.confirm) {
                                 console.log('保存成功');

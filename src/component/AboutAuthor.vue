@@ -52,7 +52,7 @@ export default {
         },
         rewardAuthor() {
             wx.previewImage({
-                urls: ['http://pnqvs14u3.bkt.clouddn.com/reward_code.jpg']
+                urls: ['http://prjiqix5t.bkt.clouddn.com/reward_code.jpg']
             });
         }
     },
