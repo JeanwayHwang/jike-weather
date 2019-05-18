@@ -17,7 +17,7 @@
             <h2 class="air-quality"><span class="qa-great">{{airQuality.score}} 空气质量{{airQuality.grade}}</span></h2>
         </div>
         <!--逐时预报板块-->
-        <div class="forecast-wrap">
+        <scroll-view scroll-x class="forecast-wrap">
             <h1>逐时天气</h1>
             <ul class="forecast-list">
                 <li v-for="(item, index) in hourlyForecastList" :key="index">
@@ -31,9 +31,9 @@
                     </template>   
                 </li>
             </ul>
-        </div>
+        </scroll-view>
         <!--多日预报板块-->
-        <div class="forecast-wrap">
+        <scroll-view scroll-x class="forecast-wrap">
             <h1>多日预报</h1>
             <ul class="forecast-list">
                 <li v-for="(item, index) in dailyForecastList" :key="index">
@@ -44,7 +44,7 @@
                     <h3>{{item.minTmp}}°</h3>
                 </li>
             </ul>
-        </div>
+        </scroll-view>
         <!--生活指数板块-->
         <div class="lifestyle-wrap">
             <h1 class="lifestyle-title">逐时天气</h1>

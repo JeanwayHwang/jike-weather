@@ -3,7 +3,7 @@
         <div class="search-wrap">
             <div class="search-box">
                 <h2 class="search-box-icon iconfont icon-book-open-outline"></h2>
-                <input placeholder="请输入地区名称" v-model="searchWord"/>
+                <input placeholder="请输入城市或地区名" auto-focus confirm-type="search" v-model="searchWord" @confirm="search"/>
                 <h2 class="search-box-close iconfont icon-close-outline" @click="clearInput"></h2>
             </div>
             <button class="search-icon iconfont icon-search-outline" @click="search"></button>
@@ -63,6 +63,14 @@ export default {
             wx.setStorageSync('searchHistoryList', this.searchHistoryList);
         },
         search() {
+            if (!this.searchWord) {
+                // 检索内容为空时，禁止提交请求
+                wx.showToast({
+                    title: '请输入要搜索的城市或地区',
+                    icon: 'none'
+                });
+                return;
+            }
             searchLocation(this.searchWord).then(res => {
                 const searchList = res && res.HeWeather6 && res.HeWeather6[0] && res.HeWeather6[0].basic || [];
                 searchList.forEach(item => {

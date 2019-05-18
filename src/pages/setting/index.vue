@@ -6,7 +6,7 @@
         </div>
 
         <div class="setting-wrap">
-            <navigator url="/pages/info/main?type=permission" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <navigator class="weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <button class="btn-wx" open-type="openSetting"></button>
                 <div class="weui-cell__hd"><span class="item-icon iconfont icon-shield-outline"></span></div>
                 <div class="weui-cell__bd">授权管理</div>
@@ -53,7 +53,7 @@ export default {
     methods: {
         rewardAuthor() {
             wx.previewImage({
-                urls: ['http://pnqvs14u3.bkt.clouddn.com/reward_code.jpg']
+                urls: ['http://prjiqix5t.bkt.clouddn.com/reward_code.jpg']
             });
         }
     },
