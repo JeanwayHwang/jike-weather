@@ -1,6 +1,6 @@
 <template>
     <div class="jike-poster">
-        <painter :customStyle="customStyle" @imgOK="onImgOk" :palette="template" :dirty="true"/>
+        <painter :customStyle="customStyle" @imgOK="onImgOk" :palette="template" :dirty="true" v-show="imgLoaded"/>
         <div class="btn-wrap">
             <button class='save-btn' @click="rePaint">重新生成</button>
             <button class='save-btn' @click="saveImage">保存相册</button>
@@ -50,10 +50,11 @@ const PoemList = [
 export default {
     data() {
         return {
+            imgLoaded: false,
             nowDate: '',
             currentCond: {},
             shareImgUrl: '',
-            customStyle: 'border: solid 1rpx #ccc; margin-top: 80rpx; margin-left: 40rpx',
+            customStyle: 'margin-top: 80rpx; margin-left: 40rpx',
             nickName: '',
             avatarUrl: '',
             template: {}
@@ -64,9 +65,12 @@ export default {
 
         },
         onImgOk(e) {
+            this.imgLoaded = true;
+            wx.hideLoading();
             this.shareImgUrl = e.target.path;
         },
         refreshTemplate() {
+            wx.showLoading({title: '拼命生成中...'});
             let currentCond = this.currentCond;
             let totemName = getConditionTotem(currentCond.cond_code);
             let cardInfo = {
