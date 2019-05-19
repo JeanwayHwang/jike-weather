@@ -129,7 +129,6 @@ export default {
     onShow() {
         this.searchWord = '';
         this.searchList = [];
-        console.log('onShow', wx.getStorageSync('searchHistoryList'));
         this.searchHistoryList = wx.getStorageSync('searchHistoryList') || [];
     }
 };
