@@ -47,7 +47,7 @@
         </scroll-view>
         <!--生活指数板块-->
         <div class="lifestyle-wrap">
-            <h1 class="lifestyle-title">逐时天气</h1>
+            <h1 class="lifestyle-title">生活指数</h1>
             <ul>
                 <li v-for="item in lifeStyle" :key="item">
                     <h1 class="iconfont lifestyle-icon" :class="item.iconClass"></h1>
