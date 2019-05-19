@@ -12,18 +12,18 @@
 import {getConditionTotem, getConditionIcon} from '@/utils/common';
 import Card from '../../palette/card';
 const ShareBgList = [
-    'http://prjiqix5t.bkt.clouddn.com/share1.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share2.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share3.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share4.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share5.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share6.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share7.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share8.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share9.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share10.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share11.jpg',
-    'http://prjiqix5t.bkt.clouddn.com/share12.jpg'
+    'https://huangzhenwei.cn/jike/share1.jpg',
+    'https://huangzhenwei.cn/jike/share2.jpg',
+    'https://huangzhenwei.cn/jike/share3.jpg',
+    'https://huangzhenwei.cn/jike/share4.jpg',
+    'https://huangzhenwei.cn/jike/share5.jpg',
+    'https://huangzhenwei.cn/jike/share6.jpg',
+    'https://huangzhenwei.cn/jike/share7.jpg',
+    'https://huangzhenwei.cn/jike/share8.jpg',
+    'https://huangzhenwei.cn/jike/share9.jpg',
+    'https://huangzhenwei.cn/jike/share10.jpg',
+    'https://huangzhenwei.cn/jike/share11.jpg',
+    'https://huangzhenwei.cn/jike/share12.jpg'
 ];
 const PoemList = [
     '想念，就是穿过时间去看你',

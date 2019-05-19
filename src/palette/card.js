@@ -45,7 +45,7 @@ export default class LastMayday {
                 type: 'image',
                 url: this.cardInfo.condIcon,
                 css: {
-                    left: '150rpx',
+                    left: '154rpx',
                     top: '80rpx',
                     width: '35rpx',
                     height: '30rpx'
@@ -55,7 +55,7 @@ export default class LastMayday {
                 type: 'text',
                 text: this.cardInfo.condTxt,
                 css: {
-                    left: '200rpx',
+                    left: '204rpx',
                     top: '82rpx',
                     fontSize: '22rpx',
                     color: '#fff'
@@ -76,8 +76,8 @@ export default class LastMayday {
                 css: {
                     left: '46rpx',
                     top: '124rpx',
-                    width: '100rpx',
-                    height: '25rpx',
+                    width: '146rpx',
+                    height: '28rpx',
                     background: '#000',
                     borderRadius: '5rpx',
                     borderColor: '#fff',
@@ -88,12 +88,12 @@ export default class LastMayday {
                 type: 'text',
                 text: '空气质量：' + this.cardInfo.grade,
                 css: {
-                    left: '96rpx',
-                    top: '128rpx',
-                    fontSize: '14rpx',
-                    lineHeight: '25rpx',
+                    left: '60rpx',
+                    top: '125rpx',
+                    fontSize: '20rpx',
+                    lineHeight: '28rpx',
                     color: '#fff',
-                    align: 'center'
+                    align: 'left'
                 }
             },
             {
@@ -102,7 +102,7 @@ export default class LastMayday {
                 css: {
                     left: '24rpx',
                     top: '460rpx',
-                    fontSize: '20rpx',
+                    fontSize: '24rpx',
                     color: '#222',
                     align: 'left'
                 }
@@ -113,7 +113,7 @@ export default class LastMayday {
                 css: {
                     right: '40rpx',
                     top: '460rpx',
-                    fontSize: '20rpx',
+                    fontSize: '24rpx',
                     color: '#ccc',
                     align: 'right'
                 }
@@ -124,7 +124,7 @@ export default class LastMayday {
                 css: {
                     right: '40rpx',
                     top: '490rpx',
-                    fontSize: '20rpx',
+                    fontSize: '24rpx',
                     color: '#ccc',
                     align: 'right'
                 }
@@ -143,7 +143,7 @@ export default class LastMayday {
                 type: 'image',
                 url: this.cardInfo.qrcodeImgUrl,
                 css: {
-                    left: '140rpx',
+                    left: '130rpx',
                     top: '580rpx',
                     width: '400rpx',
                     height: '193rpx'

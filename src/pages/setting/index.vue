@@ -53,7 +53,7 @@ export default {
     methods: {
         rewardAuthor() {
             wx.previewImage({
-                urls: ['http://prjiqix5t.bkt.clouddn.com/reward_code.jpg']
+                urls: ['https://huangzhenwei.cn/jike/reward_code.jpg']
             });
         }
     },
