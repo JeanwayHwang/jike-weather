@@ -74,7 +74,7 @@ export default {
                 nowDate: this.nowDate,
                 condIcon: `/static/images/cond/${getConditionIcon(currentCond.cond_code)}.png`,
                 totemImgUrl: `/static/images/totem/${totemName}.jpg`,
-                qrcodeImgUrl: '/static/images/qr_code.jpg',
+                qrcodeImgUrl: '/static/images/qrcode.png',
                 location: currentCond.location,
                 tmp: currentCond.tmp + '°',
                 condTxt: currentCond.cond_txt,
