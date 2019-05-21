@@ -77,8 +77,9 @@
 </template>
 
 <script>
-import {getWeather, getNowAir, getMyLocation} from '@/utils/api';
+import {getWeather, getNowAir, getLocationByIP} from '@/utils/api';
 import {goToPage, getConditionTotem, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime, setCity, getCity} from '@/utils/common';
+const QQMapWX = require('../../../static/js/qqmap-wx-jssdk.js');
 
 export default {
     data() {
@@ -167,6 +168,37 @@ export default {
         }
     },
     methods: {
+        getLocation() {
+            return new Promise((resolve, reject) => {
+                wx.getLocation({
+                    type: 'gcj02',
+                    success(res) {
+                        let qqmapsdk = new QQMapWX({
+                            key: 'YSJBZ-6SE3G-YNXQP-IG5UK-FAAPQ-S4B7D'
+                        });
+                        // reverseGeocoder 为 QQMapWX 解析 经纬度的方法
+                        let {latitude, longitude} = res;
+                        qqmapsdk.reverseGeocoder({
+                            location: {latitude, longitude},
+                            success(res) {
+                                let data = res.result && res.result.address_component;
+                                if (data) {
+                                    resolve(data);
+                                } else {
+                                    reject(res);
+                                }
+                            },
+                            fail(err) {
+                                reject(err);
+                            }
+                        });
+                    },
+                    fail(err) {
+                        reject(err);
+                    }
+                });
+            });
+        },
         switchTab(targetPage) {
             goToPage(targetPage);
         },
@@ -211,18 +243,32 @@ export default {
                 console.log(err);
             });
         },
+        setLocation(location, cityName) {
+            setCity(location, cityName);
+            wx.setStorageSync('myLocation', location); // 当前定位的实际位置
+            wx.setStorageSync('nowLocation', location); // 当前展示的选定位置
+            this.location = location;
+            this.isLocationHere = true;
+        },
         refreshLocation() {
             // 重新获取当前定位及天气信息
-            getMyLocation().then(res => {
-                let data = res.data && res.data.result && res.data.result.ad_info || {};
+            this.getLocation().then(data => {
+                // 获取定位信息成功
                 let location = data.district || data.city;
-                setCity(location, data.city);
-                wx.setStorageSync('myLocation', location); // 当前定位的实际位置
-                wx.setStorageSync('nowLocation', location); // 当前展示的选定位置
-                this.location = location;
-                this.isLocationHere = true;
-            }).catch(err => {
-                console.log(err);
+                this.setLocation(location, data.city);
+            }, res => {
+                // 获取定位信息失败
+                getLocationByIP().then(res => {
+                    let data = res.data && res.data.result && res.data.result.ad_info || {};
+                    let location = data.district || data.city;
+                    this.setLocation(location, data.city);
+                }).catch(err => {
+                    console.log(err);
+                    wx.showToast({
+                        title: '请前往设置授权地理位置信息',
+                        icon: 'none'
+                    });
+                });
             });
         }
     },

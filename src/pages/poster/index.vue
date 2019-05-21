@@ -61,15 +61,12 @@ export default {
         };
     },
     methods: {
-        fetchWallPaper() {
-
-        },
         onImgOk(e) {
             this.imgLoaded = true;
             wx.hideLoading();
             this.shareImgUrl = e.target.path;
         },
-        refreshTemplate() {
+        rePaint() {
             wx.showLoading({title: '拼命生成中...'});
             let currentCond = this.currentCond;
             let totemName = getConditionTotem(currentCond.cond_code);
@@ -88,9 +85,6 @@ export default {
                 shareBg: ShareBgList[Math.floor(Math.random() * ShareBgList.length)]
             };
             this.template = new Card().do(cardInfo);
-        },
-        rePaint() {
-            this.refreshTemplate();
         },
         saveImage() {
             if (!this.shareImgUrl) {
@@ -138,7 +132,7 @@ export default {
         let day = new Date().getDate();
         this.nowDate = `${month}月${day}日`;
         this.currentCond = wx.getStorageSync('currentCond') || {};
-        this.refreshTemplate();
+        this.rePaint();
     }
 };
 </script>

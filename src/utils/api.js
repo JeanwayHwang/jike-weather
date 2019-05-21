@@ -97,7 +97,7 @@ export function searchLocation(location = '北京市') {
  *
  * @return {Promise} Promise 响应结果
  */
-export function getMyLocation() {
+export function getLocationByIP() {
     let fly = new Fly();
     fly.config.baseURL = 'https://apis.map.qq.com/ws/location/v1';
     return fly.get('/ip?key=YSJBZ-6SE3G-YNXQP-IG5UK-FAAPQ-S4B7D');
