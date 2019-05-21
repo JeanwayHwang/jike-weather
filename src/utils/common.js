@@ -142,7 +142,7 @@ export function getFormatTime() {
     let date = new Date();
     let hour = date.getHours();
     let min = date.getMinutes();
-    return (hour >= 10 ? hour : '0' + hour) + ':' + min;
+    return (hour >= 10 ? hour : '0' + hour) + ':' + (min >= 10 ? min : '0' + min);
 }
 
 /**

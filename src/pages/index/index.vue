@@ -80,6 +80,7 @@
 import {getWeather, getNowAir, getLocationByIP} from '@/utils/api';
 import {goToPage, getConditionTotem, getConditionIcon, getLifestyleName, getLifestyleIcon, getWeekDate, getFormatTime, setCity, getCity} from '@/utils/common';
 const QQMapWX = require('../../../static/js/qqmap-wx-jssdk.js');
+let updateTimer;
 
 export default {
     data() {
@@ -270,19 +271,29 @@ export default {
                     });
                 });
             });
+        },
+        updateTime() {
+            this.nowTime = getFormatTime();
+            this.weekDate = getWeekDate();
+            updateTimer = setTimeout(() => {
+                this.updateTime();
+            }, 60 * 1000);
         }
     },
     onLoad() {
         wx.setStorageSync('nowLocation', '');
     },
     onShow() {
-        this.nowTime = getFormatTime();
-        this.weekDate = getWeekDate();
+        this.updateTime();
         let newLocation = wx.getStorageSync('nowLocation') || '';
         if (newLocation !== this.location) {
             this.location = newLocation;
             this.isLocationHere = false;
         }
+    },
+    onHide() {
+        clearTimeout(updateTimer);
+        updateTimer = null;
     }
 };
 </script>
