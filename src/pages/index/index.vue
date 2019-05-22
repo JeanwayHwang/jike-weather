@@ -73,6 +73,11 @@
         <button class="location-btn" @click="refreshLocation" v-if="!isLocationHere">
             <h2 class="iconfont icon-pin-outline"></h2>
         </button>
+        <!--添加到我的小程序引导-->
+        <div class="smartapp-guide" v-if="showGuide">
+            <h2>添加到我的小程序，微信首页下拉可直达</h2>
+            <div class="close-guide iconfont icon-close-outline" @click="closeGuide"></div>
+        </div>
     </div>
 </template>
 
@@ -85,6 +90,7 @@ let updateTimer;
 export default {
     data() {
         return {
+            showGuide: false,
             location: null,
             isLocationHere: true,
             nowTime: '00:00',
@@ -169,6 +175,10 @@ export default {
         }
     },
     methods: {
+        closeGuide() {
+            this.showGuide = false;
+            wx.setStorageSync('showGuide', true);
+        },
         getLocation() {
             return new Promise((resolve, reject) => {
                 wx.getLocation({
@@ -282,6 +292,12 @@ export default {
     },
     onLoad() {
         wx.setStorageSync('nowLocation', '');
+        this.showGuide = !wx.getStorageSync('showGuide');
+        if (this.showGuide) {
+            setTimeout(() => {
+                this.showGuide = false;
+            }, 10 * 1000);
+        }
     },
     onShow() {
         this.updateTime();
@@ -524,6 +540,43 @@ export default {
             width: 40px;
             font-size: 22px;
             line-height: 40px;
+        }
+    }
+    .smartapp-guide {
+        padding: 5px 30px 5px 10px;
+        background: #fff;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #666;
+        line-height: 20px;
+        line-clamp: 2;
+        position: fixed;
+        right: 10px;
+        top: 10px;
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: -8px;
+            right: 56PX;
+            width: 0;
+            height: 0;
+            border-width: 0 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent #fff;
+        }
+        .close-guide {
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            font-size: 14px;
+            text-align: center;
+            background-color: #ddd;
+            color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            right: 7px;
+            top: 7px;
         }
     }
 
