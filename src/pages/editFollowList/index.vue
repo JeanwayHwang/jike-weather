@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-follow-wrap">
+    <div class="edit-follow-wrap" @touchmove.stop="nothing">
         <div class="location-item" v-for="(item, index) in followList" :key="index">
             <h2 class="city-name">{{item}}</h2>
             <h3 class="btn-drag iconfont icon-move-outline" :id="'item' + index" @touchend="moveCity($event, item, index)"></h3>

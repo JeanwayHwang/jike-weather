@@ -10,8 +10,10 @@
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wx529c5dbb4efe9427",
+	"appid": "wx9eab9707392c2ade",
 	"projectname": "jike-weather",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
