@@ -2,20 +2,13 @@
 
 > 即刻天气：一款基于Mpvue框架开发的天气工具类微信小程序。
 
-### 扫码体验
-
-微信小程序码：<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/xcx_code.png" width="300" alt="微信小程序码">
+### 扫码体验（微信小程序码）
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/xcx_code.png" width="300" alt="微信小程序码">
 
 ### 预览图
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png" width="200" alt="首页">
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home2.png" width="200" alt="首页2">
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/collection.png" width="200" alt="收藏页">
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/search.png" width="200" alt="搜索页">
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/poster.png" width="200" alt="分享页">
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/setting.png" width="200" alt="设置">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png" width="900" alt="小程序截屏">
 
 ### 已实现功能：
-
 - [x]   自动定位、获取当前位置的天气（含逐时预报、七日预报、空气质量、生活指数等）
 - [x]   城市区域搜索功能（含历史记录）
 - [x]   多地城市收藏夹功能（含添加、删除、排序等）
