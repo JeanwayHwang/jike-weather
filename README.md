@@ -4,16 +4,15 @@
 
 ### 扫码体验
 
-微信小程序码： [微信小程序码](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/xcx_code.png){:width="200"}
+微信小程序码：<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/xcx_code.png" width="300" alt="微信小程序码">
 
 ### 预览图
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png" width="200" height="400" alt="首页">
-![首页](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png){:width="200"}
-![首页2](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home2.png){:width="200"}
-![收藏页](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/collection.png){:width="200"}
-![搜索页](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/search.png){:width="200"}
-![分享页](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/poster.png){:width="200"}
-![设置](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/setting.png){:width="200"}
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png" width="200" alt="首页">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home2.png" width="200" alt="首页2">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/collection.png" width="200" alt="收藏页">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/search.png" width="200" alt="搜索页">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/poster.png" width="200" alt="分享页">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/setting.png" width="200" alt="设置">
 
 ### 已实现功能：
 
