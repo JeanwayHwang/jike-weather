@@ -7,7 +7,7 @@
 微信小程序码： [微信小程序码](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/xcx_code.png){:width="200"}
 
 ### 预览图
-
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png" width="200" height="400" alt="首页">
 ![首页](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png){:width="200"}
 ![首页2](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home2.png){:width="200"}
 ![收藏页](https://github.com/JeanwayHwang/jike-weather/blob/master/asset/collection.png){:width="200"}
