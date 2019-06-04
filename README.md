@@ -6,7 +6,7 @@
 <img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/xcx_code.png" width="300" alt="微信小程序码">
 
 ### 预览图
-<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/home.png" width="900" alt="小程序截屏">
+<img src="https://github.com/JeanwayHwang/jike-weather/blob/master/asset/shotscreen.png" width="900" alt="小程序截屏">
 
 ### 已实现功能：
 - [x]   自动定位、获取当前位置的天气（含逐时预报、七日预报、空气质量、生活指数等）
