@@ -41,7 +41,7 @@ export default {
         },
         followWeibo() {
             wx.setClipboardData({
-                data: '暖床我最棒',
+                data: '炮灰小黄',
                 success(res) {
                     wx.showToast({
                         title: '已复制微博昵称',
